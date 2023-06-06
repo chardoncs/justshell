@@ -9,6 +9,6 @@ License: LGPL-3.0
 # How to use
 ## Command line
 ```bash
-$ justshell http://path/to/your/file
+$ justshell http://your/url
 ```
 ## Interactive
