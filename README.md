@@ -1,4 +1,4 @@
-# justshell
+# JustShell
 
 Simple and boring web app wrapper
 
