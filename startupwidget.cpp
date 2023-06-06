@@ -25,11 +25,11 @@ StartupWidget::StartupWidget(const QString &path) : QWidget()
 }
 
 void StartupWidget::startup() {
-    if (path_p.length() == 0) {
-        emit askForUrl();
+    if (path_p.length()) {
+        emit launchDirectly(path_p);
     }
     else {
-        emit launchDirectly(path_p);
+        emit askForUrl();
     }
 }
 
@@ -42,6 +42,8 @@ void StartupWidget::launch(const QString &path) {
 }
 
 void StartupWidget::interact() {
+    this->setWindowTitle("JustShell");
+
     layout = new QVBoxLayout(this);
 
     label = new QLabel("Please enter the URL you would like to access", this);
