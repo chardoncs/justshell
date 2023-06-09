@@ -15,7 +15,8 @@ StartupWidget::StartupWidget(const QString &path) : QWidget()
     // Startup behaviors
     connect(this, &StartupWidget::askForUrl, &StartupWidget::interact);
     connect(this, &StartupWidget::launchDirectly, &StartupWidget::launch);
-    connect(this, &StartupWidget::loading, &StartupWidget::initializeLoadingWindow);
+    connect(this, &StartupWidget::loading, loadingWidget, &LoadingWidget::show);
+
     // Web engine behaviors
     connect(view, &QWebEngineView::titleChanged, &QWebEngineView::setWindowTitle);
     connect(view, &QWebEngineView::iconChanged, &QWebEngineView::setWindowIcon);
@@ -62,10 +63,6 @@ void StartupWidget::interact() {
 
     this->resize(350, 160);
     this->show();
-}
-
-void StartupWidget::initializeLoadingWindow() {
-    loadingWidget->show();
 }
 
 void StartupWidget::updateStartupButtonStatus() {

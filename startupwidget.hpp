@@ -36,7 +36,6 @@ private:
 private slots:
     void launch(const QString &path);
     void interact();
-    void initializeLoadingWindow();
 
     void updateStartupButtonStatus();
 
