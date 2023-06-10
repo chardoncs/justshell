@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 
 project(
     justshell
-    VERSION 0.1.0
+    VERSION 0.2.0
     DESCRIPTION "Simple and boring web app wrapper"
     LANGUAGES CXX
 )
