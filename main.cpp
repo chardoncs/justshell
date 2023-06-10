@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 
     Arguments args(argc, argv);
 
-    StartupWidget sw(args.path());
+    StartupWidget sw(args.url());
     sw.startup();
 
     return a.exec();

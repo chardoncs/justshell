@@ -5,6 +5,7 @@
 #include <QPointer>
 #include <QPushButton>
 #include <QLineEdit>
+#include <QRegularExpression>
 #include <QWebEngineView>
 #include <QWidget>
 #include <QVBoxLayout>
@@ -15,13 +16,15 @@ class StartupWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit StartupWidget(const QString &path);
+    explicit StartupWidget(const QString &);
 
 public slots:
     void startup();
 
 private:
-    QString path_p;
+    QUrl _url;
+    bool directMode;
+
     QPointer<QWebEngineView> view;
 
     QPointer<LoadingWidget> loadingWidget;
@@ -33,8 +36,13 @@ private:
 
     void showLoading();
 
+    QRegularExpression patternPrefix{"^(https?|ftp)://"};
+    QRegularExpression patternDomain{"^([\\d\\w]+\\.)+[\\d\\w]+$"};
+
+    QUrl resoluteUrl(const QString &);
+
 private slots:
-    void launch(const QString &path);
+    void launch(const QUrl &);
     void interact();
 
     void updateStartupButtonStatus();
@@ -42,7 +50,7 @@ private slots:
     void launchWithInput();
 
 signals:
-    void launchDirectly(const QString &);
+    void direct(const QUrl &);
     void askForUrl();
     void loading();
 };

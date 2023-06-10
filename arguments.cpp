@@ -7,11 +7,11 @@ Arguments::Arguments(int argc, char *argv[]) : QObject()
             continue;
         }
 
-        _path = QString(argv[i]);
+        url_str = QString(argv[i]);
         break;
     }
 }
 
-const QString &Arguments::path() const {
-    return _path;
+const QString &Arguments::url() const {
+    return url_str;
 }

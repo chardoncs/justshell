@@ -3,10 +3,11 @@
 #include <QFont>
 #include <QUrl>
 
-StartupWidget::StartupWidget(const QString &path) : QWidget()
+StartupWidget::StartupWidget(const QString &url) : QWidget()
 {
-    this->path_p = path.trimmed();
+    this->_url = resoluteUrl(url);
     this->view = nullptr;
+    this->directMode = url.length();
 
     loadingWidget = new LoadingWidget();
 
@@ -14,7 +15,7 @@ StartupWidget::StartupWidget(const QString &path) : QWidget()
 
     // Startup behaviors
     connect(this, &StartupWidget::askForUrl, &StartupWidget::interact);
-    connect(this, &StartupWidget::launchDirectly, &StartupWidget::launch);
+    connect(this, &StartupWidget::direct, &StartupWidget::launch);
     connect(this, &StartupWidget::loading, loadingWidget, &LoadingWidget::show);
 
     // Web engine behaviors
@@ -26,19 +27,19 @@ StartupWidget::StartupWidget(const QString &path) : QWidget()
 }
 
 void StartupWidget::startup() {
-    if (path_p.length()) {
-        emit launchDirectly(path_p);
+    if (directMode) {
+        emit direct(_url);
     }
     else {
         emit askForUrl();
     }
 }
 
-void StartupWidget::launch(const QString &path) {
+void StartupWidget::launch(const QUrl &url) {
     emit loading();
 
     // Initialize web engine
-    view->setUrl(QUrl(path));
+    view->setUrl(url);
     view->showMaximized();
 }
 
@@ -70,5 +71,19 @@ void StartupWidget::updateStartupButtonStatus() {
 }
 
 void StartupWidget::launchWithInput() {
-    this->launch(entry->text().trimmed());
+    this->launch(resoluteUrl(entry->text()));
+}
+
+QUrl StartupWidget::resoluteUrl(const QString &url) {
+    QString trimmed = url.trimmed();
+
+    if (patternPrefix.match(trimmed).hasMatch()) {
+        return QUrl(trimmed);
+    }
+
+    if (patternDomain.match(trimmed.split("/")[0]).hasMatch()) {
+        return QUrl("https://" + trimmed);
+    }
+
+    return QUrl::fromLocalFile(trimmed);
 }

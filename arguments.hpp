@@ -2,6 +2,8 @@
 #define ARGUMENTS_HPP
 
 #include <QObject>
+#include <QRegularExpression>
+#include <QUrl>
 
 class Arguments : public QObject
 {
@@ -9,10 +11,10 @@ class Arguments : public QObject
 public:
     explicit Arguments(int argc, char *argv[]);
 
-    const QString &path() const;
+    const QString &url() const;
 
 private:
-    QString _path;
+    QString url_str;
 
 signals:
 
