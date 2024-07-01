@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="UrlDialog" parent="GtkWindow">
+    <property name="title">Enter URL | JustShell</property>
+    <property name="resizable">false</property>
+    <property name="width_request">480</property>
+    <property name="height_request">320</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="vexpand">true</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Enter URL to proceed</property>
+                <property name="hexpand">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="entry">
+                <property name="placeholder-text">URL</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="halign">end</property>
+            <property name="spacing">10</property>
+            <child>
+              <object class="GtkButton" id="cancel_button">
+                <property name="label">Cancel</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="ok_button">
+                <property name="label">Open</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

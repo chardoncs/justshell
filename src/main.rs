@@ -1,15 +1,13 @@
 use clap::Parser;
 use cli::Cli;
 use error::{Error, ErrorKind};
-use gtk::{gio::ApplicationFlags, prelude::{ApplicationExt, ApplicationExtManual}, Application};
-use gui::browser_window::new_browser_window;
+use gtk::{gio::{ApplicationFlags, self}, prelude::*, Application};
+use gui::{browser_window::new_browser_window, url_dialog::UrlDialog};
 use url::Url;
 
 mod cli;
 mod error;
 mod gui;
-
-const APP_ID: &'static str = "com.chardoncs.justshell";
 
 fn main() -> Result<(), Error> {
     let args = Cli::parse();
@@ -21,25 +19,31 @@ fn main() -> Result<(), Error> {
         None
     };
 
+    gio::resources_register_include!("justshell-ui.gresource")
+        .expect("Failed to register resources");
+
     let app = Application::builder()
-        .application_id(APP_ID)
+        .application_id("com.chardoncs.justshell")
         .flags(ApplicationFlags::HANDLES_OPEN)
         .build();
 
     app.connect_activate(move |app| {
         if let Some(url) = url.as_ref() {
-            let _ = new_browser_window(app, url);
+            new_browser_window(app, url);
+        } else {
+            let dialog = UrlDialog::new(app);
+            dialog.present();
         }
     });
 
-    app.connect_open(move |app, _, _| {
+    app.connect_open(|app, _, _| {
         app.activate();
     });
 
     let e = app.run();
 
     if e.value() != 0 {
-        Err(Error::new(ErrorKind::Gui, "GTK exited unexpectedly."))?;
+        Err(Error::new(ErrorKind::Gui, "Window exited with error"))?;
     }
 
     Ok(())

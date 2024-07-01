@@ -2,7 +2,7 @@ use gtk::{prelude::*, Application, ApplicationWindow};
 use url::Url;
 use webkit6::{prelude::*, WebView};
 
-pub fn new_browser_window(app: &Application, url: &Url) -> ApplicationWindow {
+pub fn new_browser_window(app: &Application, url: &Url) {
     let webview = WebView::builder()
         .build();
 
@@ -28,5 +28,4 @@ pub fn new_browser_window(app: &Application, url: &Url) -> ApplicationWindow {
     webview.load_uri(url.as_str());
 
     window.present();
-    window
 }
