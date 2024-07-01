@@ -1,4 +1,2 @@
-extern crate gtk;
-
-mod browser_window;
-mod url_dialog;
+pub mod browser_window;
+pub mod url_dialog;
