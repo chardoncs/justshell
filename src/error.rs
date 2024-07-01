@@ -1,6 +1,5 @@
-use std::fmt::Display;
+use std::fmt::{Debug, Display};
 
-#[derive(Debug)]
 pub enum ErrorKind {
     Gui,
     UrlProcessing,
@@ -15,7 +14,12 @@ impl Display for ErrorKind {
     }
 }
 
-#[derive(Debug)]
+impl Debug for ErrorKind {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self)
+    }
+}
+
 pub struct Error {
     pub msg: String,
     pub kind: ErrorKind,
@@ -33,5 +37,11 @@ impl Error {
 impl Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "error: ({}) {}", self.kind.to_string(), self.msg)
+    }
+}
+
+impl Debug for Error {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self)
     }
 }
