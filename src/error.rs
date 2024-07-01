@@ -1,17 +1,17 @@
+use std::fmt::Display;
+
 #[derive(Debug)]
 pub enum ErrorKind {
     Gui,
-    UrlAbsent,
     UrlProcessing,
 }
 
-impl ToString for ErrorKind {
-    fn to_string(&self) -> String {
-        match self {
+impl Display for ErrorKind {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", match self {
             Self::Gui => "GUI",
-            Self::UrlAbsent => "No URLs",
             Self::UrlProcessing => "Invalid URL",
-        }.to_string()
+        })
     }
 }
 
@@ -30,8 +30,8 @@ impl Error {
     }
 }
 
-impl ToString for Error {
-    fn to_string(&self) -> String {
-        format!("error: ({}) {}", self.kind.to_string(), self.msg)
+impl Display for Error {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "error: ({}) {}", self.kind.to_string(), self.msg)
     }
 }
