@@ -1,7 +1,5 @@
-use gtk::{prelude::*, gio::{self, ActionEntry}, glib::{self, prelude::*, property::{PropertyGet, PropertySet}, Object, clone}, subclass::prelude::*, Application};
+use gtk::{gdk::Key, gio, glib::{self, clone, Object}, prelude::*, subclass::prelude::*, Application, EventControllerKey};
 use url::Url;
-
-use super::browser_window::new_browser_window;
 
 mod imp;
 
@@ -20,7 +18,29 @@ impl UrlDialog {
             .build()
     }
 
-    fn setup_actions(&self) {
+    fn setup_controllers(&self) {
+        let key_controller = EventControllerKey::builder()
+            .name("key-controller")
+            .build();
+
+        let dialog = self.clone();
+
+        key_controller.connect_key_pressed(move |_, key, _, _| {
+            match key {
+                Key::Return => {
+                    let url_str = dialog.imp().entry.text();
+
+                    if Url::parse(url_str.as_str()).is_ok() {
+                        dialog.emit_by_name::<()>("proceed", &[&url_str.to_string()]);
+                    }
+                }
+                _ => {}
+            }
+
+            gtk::glib::Propagation::Proceed
+        });
+
+        self.add_controller(key_controller);
     }
 
     fn setup_callbacks(&self) {
@@ -33,7 +53,7 @@ impl UrlDialog {
         self.imp()
             .ok_button
             .connect_clicked(clone!(@weak self as dialog => move |_| {
-                dialog.emit_by_name::<()>("proceed", &[&dialog.imp().entry.text().to_string()]);
+                dialog.emit_by_name::<()>("proceed", &[&dialog.imp().entry.text().trim().to_string()]);
             }));
 
         self.imp()

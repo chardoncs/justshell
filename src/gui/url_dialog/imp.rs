@@ -37,7 +37,7 @@ impl ObjectImpl for UrlDialog {
         let obj = self.obj();
 
         obj.setup_callbacks();
-        obj.setup_actions();
+        obj.setup_controllers();
 
         self.ok_button.set_sensitive(false);
     }
