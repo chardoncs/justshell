@@ -4,6 +4,8 @@ version = "0.3.0"
 edition = "2021"
 license = "MIT"
 authors = ["Charles Dong <chardon_cs@proton.me>"]
+description = "Simple webapp wrapper"
+repository = "https://github.com/chardoncs/justshell.git"
 
 [dependencies]
 clap = { version = "4.5", features = ["derive"] }
