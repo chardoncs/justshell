@@ -1,4 +1,4 @@
-use gtk::{gdk::Key, gio, glib::{self, clone, Object}, prelude::*, subclass::prelude::*, Application, EventControllerKey, ShortcutController};
+use gtk::{gio, glib::{self, clone, Object}, prelude::*, subclass::prelude::*, Application};
 use url::Url;
 
 mod imp;
