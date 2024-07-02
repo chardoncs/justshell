@@ -2,6 +2,8 @@
 
 Simple webapp wrapper written in [Rust](https://rust-lang.org), based on [GTK 4](https://gtk.org/) and [WebKitGTK 6](https://webkitgtk.org/).
 
+> For the legacy version using Qt WebEngine, see [here](https://github.com/chardoncs/justshell/tree/v0.2).
+
 ## Usage
 
 Use JustShell to wrap a webapp.
