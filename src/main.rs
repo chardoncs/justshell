@@ -1,9 +1,10 @@
 use clap::Parser;
 use cli::Cli;
 use error::{Error, ErrorKind};
-use gtk::{gio::{ApplicationFlags, self}, prelude::*, Application};
+use gtk::{gio::{self, ApplicationFlags}, glib, prelude::*, Application};
 use gui::{browser_window::new_browser_window, load_css, url_dialog::UrlDialog};
 use url::Url;
+use glib::closure_local;
 
 mod cli;
 mod error;
@@ -35,6 +36,13 @@ fn main() -> Result<(), Error> {
         } else {
             let dialog = UrlDialog::new(app);
             dialog.present();
+
+            let app_ref = app.clone();
+
+            dialog.connect_closure("proceed", false, closure_local!(move |dialog: UrlDialog, url: String| {
+                new_browser_window(&app_ref, &Url::parse(url.as_str()).unwrap());
+                dialog.close();
+            }));
         }
     });
 

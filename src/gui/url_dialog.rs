@@ -1,4 +1,4 @@
-use gtk::{gdk::Key, gio, glib::{self, clone, Object}, prelude::*, subclass::prelude::*, Application, EventControllerKey};
+use gtk::{gdk::Key, gio, glib::{self, clone, Object}, prelude::*, subclass::prelude::*, Application, EventControllerKey, ShortcutController};
 use url::Url;
 
 mod imp;
@@ -16,31 +16,6 @@ impl UrlDialog {
         Object::builder()
             .property("application", app)
             .build()
-    }
-
-    fn setup_controllers(&self) {
-        let key_controller = EventControllerKey::builder()
-            .name("key-controller")
-            .build();
-
-        let dialog = self.clone();
-
-        key_controller.connect_key_pressed(move |_, key, _, _| {
-            match key {
-                Key::Return => {
-                    let url_str = dialog.imp().entry.text();
-
-                    if Url::parse(url_str.as_str()).is_ok() {
-                        dialog.emit_by_name::<()>("proceed", &[&url_str.to_string()]);
-                    }
-                }
-                _ => {}
-            }
-
-            gtk::glib::Propagation::Proceed
-        });
-
-        self.add_controller(key_controller);
     }
 
     fn setup_callbacks(&self) {

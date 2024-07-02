@@ -33,6 +33,17 @@
             <child>
               <object class="GtkButton" id="ok_button">
                 <property name="label">Open</property>
+                <child>
+                  <object class='GtkShortcutController'>
+                    <property name='scope'>managed</property>
+                    <child>
+                      <object class='GtkShortcut'>
+                        <property name='trigger'>Return</property>
+                        <property name='action'>clicked</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
