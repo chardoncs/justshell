@@ -2,7 +2,7 @@ use clap::Parser;
 use cli::Cli;
 use error::{Error, ErrorKind};
 use gtk::{gio::{ApplicationFlags, self}, prelude::*, Application};
-use gui::{browser_window::new_browser_window, url_dialog::UrlDialog};
+use gui::{browser_window::new_browser_window, load_css, url_dialog::UrlDialog};
 use url::Url;
 
 mod cli;
@@ -27,6 +27,8 @@ fn main() -> Result<(), Error> {
         .flags(ApplicationFlags::HANDLES_OPEN)
         .build();
 
+    app.connect_startup(|_| load_css());
+
     app.connect_activate(move |app| {
         if let Some(url) = url.as_ref() {
             new_browser_window(app, url);
@@ -40,9 +42,7 @@ fn main() -> Result<(), Error> {
         app.activate();
     });
 
-    let e = app.run();
-
-    if e.value() != 0 {
+    if app.run().value() != 0 {
         Err(Error::new(ErrorKind::Gui, "Window exited with error"))?;
     }
 

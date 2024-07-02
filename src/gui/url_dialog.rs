@@ -1,4 +1,7 @@
-use gtk::{prelude::*, gio::{self, ActionEntry}, glib::{self, prelude::*, property::{PropertyGet, PropertySet}, Object}, subclass::prelude::*, Application};
+use gtk::{prelude::*, gio::{self, ActionEntry}, glib::{self, prelude::*, property::{PropertyGet, PropertySet}, Object, clone}, subclass::prelude::*, Application};
+use url::Url;
+
+use super::browser_window::new_browser_window;
 
 mod imp;
 
@@ -15,5 +18,30 @@ impl UrlDialog {
         Object::builder()
             .property("application", app)
             .build()
+    }
+
+    fn setup_actions(&self) {
+    }
+
+    fn setup_callbacks(&self) {
+        self.imp()
+            .cancel_button
+            .connect_clicked(clone!(@weak self as dialog => move |_| {
+                dialog.close();
+            }));
+
+        self.imp()
+            .ok_button
+            .connect_clicked(clone!(@weak self as dialog => move |_| {
+                dialog.emit_by_name::<()>("proceed", &[&dialog.imp().entry.text().to_string()]);
+            }));
+
+        self.imp()
+            .entry
+            .connect_text_notify(clone!(@weak self as dialog => move |entry| {
+                dialog.imp().ok_button.set_sensitive(
+                    Url::parse(entry.text().trim()).is_ok()
+                );
+            }));
     }
 }

@@ -1,10 +1,10 @@
-use gtk::{glib::{self, subclass::{prelude::*, InitializingObject}}, subclass::{prelude::*, widget::{CompositeTemplateClass, CompositeTemplateInitializingExt, WidgetImpl}, window::WindowImpl}, Button, CompositeTemplate, Entry, TemplateChild, Window};
+use std::sync::OnceLock;
+
+use gtk::{prelude::*, glib::{self, subclass::{prelude::*, InitializingObject, Signal}}, prelude::StaticType, subclass::{prelude::*, widget::{CompositeTemplateClass, CompositeTemplateInitializingExt, WidgetImpl}, window::WindowImpl}, Button, CompositeTemplate, Entry, TemplateChild, Window};
 
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/com/chardoncs/justshell/url-dialog.ui")]
 pub struct UrlDialog {
-    pub url: Option<String>,
-
     #[template_child]
     pub entry: TemplateChild<Entry>,
 
@@ -22,6 +22,7 @@ impl ObjectSubclass for UrlDialog {
 
     fn class_init(c: &mut Self::Class) {
         c.bind_template();
+        c.set_css_name("url-dialog");
     }
 
     fn instance_init(obj: &InitializingObject<Self>) {
@@ -32,6 +33,25 @@ impl ObjectSubclass for UrlDialog {
 impl ObjectImpl for UrlDialog {
     fn constructed(&self) {
         self.parent_constructed();
+
+        let obj = self.obj();
+
+        obj.setup_callbacks();
+        obj.setup_actions();
+
+        self.ok_button.set_sensitive(false);
+    }
+
+    fn signals() -> &'static [glib::subclass::Signal] {
+        static SIGNALS: OnceLock<Vec<Signal>> = OnceLock::new();
+
+        SIGNALS.get_or_init(|| {
+            vec![
+                Signal::builder("proceed")
+                    .param_types([String::static_type()])
+                    .build()
+            ]
+        })
     }
 }
 
