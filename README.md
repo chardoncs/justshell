@@ -29,3 +29,7 @@ Launch URL input dialog by simply typing in `justshell`.
 ```bash
 justshell
 ```
+
+## Why switching to Rust?
+
+Qt WebEngine is not good, period.
