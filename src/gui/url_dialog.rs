@@ -21,19 +21,19 @@ impl UrlDialog {
     fn setup_callbacks(&self) {
         self.imp()
             .cancel_button
-            .connect_clicked(clone!(@weak self as dialog => move |_| {
+            .connect_clicked(clone!(#[weak(rename_to = dialog)] self, move |_| {
                 dialog.close();
             }));
 
         self.imp()
             .ok_button
-            .connect_clicked(clone!(@weak self as dialog => move |_| {
+            .connect_clicked(clone!(#[weak(rename_to = dialog)] self, move |_| {
                 dialog.emit_by_name::<()>("proceed", &[&dialog.imp().entry.text().trim().to_string()]);
             }));
 
         self.imp()
             .entry
-            .connect_text_notify(clone!(@weak self as dialog => move |entry| {
+            .connect_text_notify(clone!(#[weak(rename_to = dialog)] self, move |entry| {
                 dialog.imp().ok_button.set_sensitive(
                     Url::parse(entry.text().trim()).is_ok()
                 );
