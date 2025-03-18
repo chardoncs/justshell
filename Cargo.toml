@@ -14,4 +14,4 @@ url = "2.5"
 webkitgtk = { package = "webkit6", version = "0.4", features = ["v2_44"] }
 
 [build-dependencies]
-glib-build-tools = "0.19"
+glib-build-tools = "0.20"
